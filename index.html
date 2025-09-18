@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo Jugadores</title>
+    <style>
+        :root {
+            --primary: #6b46c1;
+            --primary-light: #8c6bd6;
+            --secondary: #f6f7fb;
+            --card: #fff;
+            --text: #333;
+            --muted: #9aa3b2;
+            --ready: #fee;
+            --ready-border: #d33;
+            --ready-text: #b00;
+            --playing: #e6f7ff;
+            --playing-border: #91d5ff;
+            --success: #f6ffed;
+            --success-border: #b7eb8f;
+            --ranking-bg: #fff;
+            --shadow: rgba(25, 30, 70, 0.08);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--secondary) 0%, #fff 100%);
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+        }
+        
+        .app {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(107, 70, 193, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        
+        .subtitle {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .instructions {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 4px 12px var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .instructions h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .board-container {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        .board {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .cell {
+            background: var(--card);
+            padding: 20px 15px 15px;
+            border-radius: 12px;
+            border: 2px solid #f0f3f8;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+        
+        .cell:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px var(--shadow);
+        }
+        
+        .cell input {
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 10px 12px;
+            width: 90%;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 15px;
+            transition: border-color 0.2s;
+        }
+        
+        .cell input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(107, 70, 193, 0.1);
+        }
+        
+        .player-name {
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 20px;
+            color: var(--primary);
+            margin-top: 10px;
+        }
+        
+        .player-number {
+            font-weight: 800;
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .cell.ready {
+            border-color: var(--ready-border);
+            background: var(--ready);
+            color: var(--ready-text);
+        }
+        
+        .cell.playing {
+            cursor: pointer;
+            border-color: var(--playing-border);
+            background: var(--playing);
+        }
+        
+        .cell.completed {
+            border-color: var(--success-border);
+            background: var(--success);
+            animation: pulse 1s;
+        }
+        
+        .token-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background: #2db84c;
+            transform: scale(1.1);
+        }
+        
+        .badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 20px;
+            animation: fadeIn 0.5s;
+        }
+        
+        /* Estilos para el ranking y estado del juego */
+        .game-status {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .ranking {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .game-status {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 500;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        
+        .status-waiting {
+            background: #fffbf0;
+            border: 1px solid #ffe58f;
+            color: #d48806;
+        }
+        
+        .status-playing {
+            background: #e6f7ff;
+            border: 1px solid #91d5ff;
+            color: #1890ff;
+        }
+        
+        .status-finished {
+            background: #f6ffed;
+            border: 1px solid #b7eb8f;
+            color: #52c41a;
+        }
+        
+        .ranking {
+            padding: 20px;
+            background: var(--ranking-bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 16px var(--shadow);
+        }
+        
+        .ranking-title {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(107, 70, 193, 0.1);
+        }
+        
+        .ranking-list {
+            padding-left: 0;
+            margin-bottom: 0;
+            list-style-type: none;
+        }
+        
+        .ranking-list li {
+            padding: 12px 15px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: rgba(107, 70, 193, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ranking-list li:first-child {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .ranking-list li:nth-child(2) {
+            background: rgba(192, 192, 192, 0.15);
+            border: 1px solid rgba(192, 192, 192, 0.3);
+        }
+        
+        .ranking-list li:nth-child(3) {
+            background: rgba(205, 127, 50, 0.15);
+            border: 1px solid rgba(205, 127, 50, 0.3);
+        }
+        
+        .ranking-position {
+            font-weight: bold;
+            color: var(--primary);
+            background: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #resetBtn {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: #fff;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            width: 100%;
+            font-size: 16px;
+        }
+        
+        #resetBtn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(107, 70, 193, 0.3);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 900px) {
+            .game-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                flex: 1;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .board {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .player-number {
+                font-size: 28px;
+            }
+            
+            .player-name {
+                font-size: 18px;
+            }
+        }
+
+        /* Estilos para el modal de ganador */
+        .winner-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .winner-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: modalFadeIn 0.5s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .winner-modal h2 {
+            color: #6b46c1;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .winner-prize {
+            font-size: 32px;
+            font-weight: bold;
+            color: #d4af37;
+            margin: 15px 0;
+        }
+
+        .winner-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #333;
+        }
+
+        .winner-position {
+            font-size: 48px;
+            font-weight: bold;
+            color: #6b46c1;
+            margin: 15px 0;
+        }
+
+        .close-modal {
+            background: #6b46c1;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: #5a3aa3;
+            transform: translateY(-2px);
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos para el botón de ranking */
+        .ranking-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #6b46c1;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .ranking-button:hover {
+            background: #5a3aa3;
+            transform: scale(1.1);
+        }
+
+        /* Estilos para el modal de ranking */
+        .ranking-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ranking-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalFadeIn 0.5s;
+        }
+
+        .ranking-modal h2 {
+            color: #6b46c1;
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .close-ranking-modal {
+            background: #6b46c1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto 0;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .close-ranking-modal:hover {
+            background: #5a3aa3;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <h1>Bingo de Jugadores</h1>
+            <p class="subtitle">Completa los 5 puntos para ganar premios. Cada jugador tiene un número asignado.</p>
+        </header>
+
+        <div class="game-container">
+            <div id="gameStatus" class="game-status status-waiting">
+                Esperando que todos los jugadores ingresen sus nombres...
+            </div>
+            <div id="ranking" class="ranking" >
+                <h2 class="ranking-title" hidden>🏆 Ranking</h2>
+                <ol id="rankingList" class="ranking-list" hidden></ol>
+                <button id="resetBtn" class="hidden">Reiniciar Partida</button>
+            </div>
+            <div class="board-container">
+                <div id="board" class="board"></div>
+            </div>
+            
+            <div id="ranking" class="ranking" >
+                <h2 class="ranking-title">🏆 Ranking</h2>
+                <ol id="rankingList" class="ranking-list"></ol>
+                <button id="resetBtn" class="hidden">Reiniciar Partida</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const boardEl = document.getElementById('board');
+        const rankingList = document.getElementById('rankingList');
+        const resetBtn = document.getElementById('resetBtn');
+        const gameStatus = document.getElementById('gameStatus');
+
+        const premios = ["20 Lukas", "10 Lukas", "5 Lukas"];
+        const ranking = [];
+        const playersCount = 9;
+
+        function createBoard(){
+            boardEl.innerHTML = '';
+            ranking.length = 0;
+            rankingList.innerHTML = '';
+            resetBtn.classList.add('hidden');
+            updateGameStatus('waiting');
+
+            for(let i = 0; i < playersCount; i++){
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.index = i;
+                cell.dataset.points = 0;
+
+                // Número grande y visible encima del nombre
+                const playerNumberDisplay = document.createElement('div');
+                playerNumberDisplay.className = 'player-number';
+                playerNumberDisplay.textContent = i + 1;
+                cell.appendChild(playerNumberDisplay);
+                
+                // Input para el nombre (visible inicialmente)
+                const input = document.createElement('input');
+                input.placeholder = 'Escribe tu nombre';
+                input.type = 'text';
+                cell.appendChild(input);
+
+                // Token row para los puntos
+                const tokenRow = document.createElement('div');
+                tokenRow.className = 'token-row';
+                for(let j = 0; j < 5; j++){
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    tokenRow.appendChild(dot);
+                }
+                cell.appendChild(tokenRow);
+
+                // Evento para el input
+                input.addEventListener('keydown', (e) => {
+                    if(e.key === 'Enter' && input.value.trim() !== ''){
+                        input.disabled = true;
+                        // Crear elemento para mostrar el nombre
+                        const nameDisplay = document.createElement('div');
+                        nameDisplay.className = 'player-name';
+                        nameDisplay.textContent = input.value;
+                        cell.insertBefore(nameDisplay, tokenRow);
+                        input.classList.add('hidden');
+                        cell.classList.add('ready');
+                        checkAllReady();
+                    }
+                });
+
+                // Evento para sumar puntos
+                cell.addEventListener('click', () => {
+                    // No hacer nada si ya hay 3 ganadores
+                    if(ranking.length >= 3) return;
+                    if(!cell.classList.contains('playing')) return;
+                    let points = +cell.dataset.points;
+                    if(points >= 5) return;
+                    
+                    points++;
+                    cell.dataset.points = points;
+                    const dots = cell.querySelectorAll('.dot');
+                    if(dots[points-1]) {
+                        dots[points-1].classList.add('active');
+                    }
+
+                    if(points === 5) {
+                        cell.classList.add('completed');
+                        cell.classList.remove('playing');
+                        
+                        if(ranking.length < 3){
+                            const nameDisplay = cell.querySelector('.player-name');
+                            const name = nameDisplay.textContent;
+                            const puesto = ranking.length + 1;
+                            ranking.push({name, position: puesto});
+                            const premio = premios[puesto-1];
+
+                            // Mostrar modal de ganador
+                            showWinnerModal(name, puesto, premio);
+
+                            // mostrar badge en la casilla
+                            const badge = document.createElement('div');
+                            badge.className = 'badge';
+                            badge.textContent = `${puesto}° - ${premio}`;
+                            cell.appendChild(badge);
+
+                            updateRanking();
+
+                            if(ranking.length === 3){
+                                resetBtn.classList.remove('hidden');
+                                updateGameStatus('finished');
+                                // Deshabilitar todas las celdas cuando hay 3 ganadores
+                                document.querySelectorAll('.cell').forEach(cell => {
+                                    cell.classList.remove('playing');
+                                    cell.style.cursor = 'default';
+                                    cell.style.opacity = '0.7';
+                                });
+                            }
+                        }
+                    }
+                });
+
+                boardEl.appendChild(cell);
+            }
+        }
+
+        function checkAllReady(){
+            const allCells = boardEl.querySelectorAll('.cell');
+            const allReady = Array.from(allCells).every(c => c.classList.contains('ready'));
+            
+            if(allReady){
+                allCells.forEach(c => {
+                    c.classList.remove('ready');
+                    c.classList.add('playing');
+                });
+                updateGameStatus('playing');
+            }
+        }
+
+        function updateGameStatus(status) {
+            gameStatus.classList.remove('status-waiting', 'status-playing', 'status-finished');
+            
+            switch(status) {
+                case 'waiting':
+                    gameStatus.textContent = 'Esperando que todos los jugadores ingresen sus nombres...';
+                    gameStatus.classList.add('status-waiting');
+                    break;
+                case 'playing':
+                    gameStatus.textContent = '¡Todos listos! Haz clic en las casillas para acumular puntos.';
+                    gameStatus.classList.add('status-playing');
+                    break;
+                case 'finished':
+                    gameStatus.textContent = '¡Juego terminado! Tenemos nuestros tres ganadores.';
+                    gameStatus.classList.add('status-finished');
+                    break;
+            }
+        }
+
+        function updateRanking(){
+            rankingList.innerHTML = '';
+            ranking.forEach((player, i) => {
+                const li = document.createElement('li');
+                
+                const positionSpan = document.createElement('span');
+                positionSpan.className = 'ranking-position';
+                positionSpan.textContent = i + 1;
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = player.name;
+                
+                const prizeSpan = document.createElement('span');
+                prizeSpan.textContent = premios[i];
+                prizeSpan.style.fontWeight = '600';
+                prizeSpan.style.color = 'var(--primary)';
+                
+                li.appendChild(positionSpan);
+                li.appendChild(nameSpan);
+                li.appendChild(prizeSpan);
+                
+                rankingList.appendChild(li);
+            });
+        }
+
+        resetBtn.addEventListener('click', () => {
+            if(confirm('¿Estás seguro de que quieres reiniciar la partida? Todos los progresos se perderán.')){
+                createBoard();
+            }
+        });
+
+        // Modal de ganador
+        const winnerModal = document.createElement('div');
+        winnerModal.className = 'winner-modal';
+        winnerModal.innerHTML = `
+            <div class="winner-modal-content">
+                <h2>¡Tenemos un ganador!</h2>
+                <div class="winner-position" id="winnerPosition">1° Lugar</div>
+                <div class="winner-name" id="winnerName">Nombre del Jugador</div>
+                <div class="winner-prize" id="winnerPrize">20 Lukas</div>
+                <button class="close-modal" onclick="document.querySelector('.winner-modal').style.display='none'">Cerrar</button>
+            </div>
+        `;
+        document.body.appendChild(winnerModal);
+
+        // Función para mostrar el modal de ganador
+        function showWinnerModal(name, position, prize) {
+            const modal = document.querySelector('.winner-modal');
+            document.getElementById('winnerName').textContent = name;
+            document.getElementById('winnerPosition').textContent = `${position}° Lugar`;
+            document.getElementById('winnerPrize').textContent = prize;
+            modal.style.display = 'flex';
+            
+            // Cerrar automáticamente después de 5 segundos
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 5000);
+        }
+
+        // Botón flotante de ranking
+        const rankingButton = document.createElement('button');
+        rankingButton.className = 'ranking-button';
+        rankingButton.innerHTML = '🏆';
+        rankingButton.title = 'Ver ranking';
+        document.body.appendChild(rankingButton);
+
+        // Modal de ranking
+        const rankingModal = document.createElement('div');
+        rankingModal.className = 'ranking-modal';
+        rankingModal.innerHTML = `
+            <div class="ranking-modal-content">
+                <h2>🏆 Ranking de Ganadores</h2>
+                <ol id="modalRankingList" class="ranking-list"></ol>
+                <button class="close-ranking-modal">Cerrar</button>
+            </div>
+        `;
+        document.body.appendChild(rankingModal);
+
+        // Función para mostrar el modal de ranking
+        function showRankingModal() {
+            const modal = document.querySelector('.ranking-modal');
+            const modalRankingList = document.getElementById('modalRankingList');
+            
+            // Actualizar la lista de ranking en el modal
+            modalRankingList.innerHTML = '';
+            if (ranking.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'Aún no hay ganadores';
+                li.style.textAlign = 'center';
+                li.style.padding = '20px';
+                li.style.color = '#666';
+                modalRankingList.appendChild(li);
+            } else {
+                ranking.forEach((player, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span class="ranking-position">${index + 1}</span>
+                        <span>${player.name}</span>
+                        <span style="font-weight: 600; color: var(--primary);">${premios[index] || 'Completado'}</span>
+                    `;
+                    modalRankingList.appendChild(li);
+                });
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        // Event listeners
+        rankingButton.addEventListener('click', showRankingModal);
+        
+        // Cerrar modal al hacer clic en el botón de cerrar
+        document.querySelector('.close-ranking-modal').addEventListener('click', () => {
+            document.querySelector('.ranking-modal').style.display = 'none';
+        });
+        
+        // Cerrar modal al hacer clic fuera del contenido
+        document.querySelector('.ranking-modal').addEventListener('click', (e) => {
+            if (e.target === document.querySelector('.ranking-modal')) {
+                document.querySelector('.ranking-modal').style.display = 'none';
+            }
+        });
+
+        createBoard();
+    </script>
+</body>
+</html>
