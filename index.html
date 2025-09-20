@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dinamica Manyalo</title>
+    <title>Dinámica Manyalo</title>
     <style>
       :root {
         --primary: #6b46c1;
@@ -863,7 +863,7 @@
   <body>
     <div class="app">
       <div class="header-container">
-        <h1>Dinamica Manyalo</h1>
+        <h1>Dinámica Manyalo</h1>
         
         <div class="prizes-row">
           <div class="prize-item" >
@@ -884,12 +884,12 @@
 
       <div class="game-container">
         <div id="gameStatus" class="game-status status-waiting">
-          Esperando que todos los jugadores ingresen sus nombres...
+          Esperando nombres...
         </div>
         <div class="board-container">
           <div id="board" class="board"></div>
         </div>
-        <button id="resetBtn" class="hidden">Reiniciar Partida</button>
+        <button id="resetBtn" class="hidden">Reiniciar</button>
       </div>
     </div>
 
@@ -1053,17 +1053,17 @@
         switch (status) {
           case "waiting":
             gameStatus.textContent =
-              "Esperando que todos los jugadores ingresen sus nombres...";
+              "Esperando nombres...";
             gameStatus.classList.add("status-waiting");
             break;
           case "playing":
             gameStatus.textContent =
-              "¡Todos listos! Haz clic en las casillas para acumular puntos.";
+              "¡Todos listos!";
             gameStatus.classList.add("status-playing");
             break;
           case "finished":
             gameStatus.textContent =
-              "¡Juego terminado! Tenemos nuestros tres ganadores.";
+              "¡Dinámica terminado!.";
             gameStatus.classList.add("status-finished");
             break;
         }
