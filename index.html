@@ -33,74 +33,67 @@
 
       body {
         background: linear-gradient(135deg, var(--secondary) 0%, #fff 100%);
-        padding: 15px;
+        padding: 12px;
         min-height: 100vh;
-        height: 100vh;
         color: var(--text);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
       }
 
       .app {
-        max-width: 1000px;
+        max-width: 800px;
         margin: 0 auto;
-        width: 100%;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
       }
 
-      header {
-        text-align: center;
+      .header-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         margin-bottom: 15px;
-        padding: 10px 0;
+        padding: 12px 0;
         border-bottom: 2px solid rgba(107, 70, 193, 0.1);
-        flex-shrink: 0;
       }
 
       h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
         color: var(--primary);
-        margin-bottom: 8px;
+        margin-bottom: 12px;
         font-weight: 800;
+        text-align: center;
       }
 
-      .subtitle {
-        color: var(--muted);
-        font-size: 1rem;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-
-      .instructions {
-        background: white;
-        padding: 12px 15px;
-        border-radius: 10px;
-        margin: 10px auto;
-        max-width: 800px;
-        box-shadow: 0 4px 12px var(--shadow);
-        border-left: 4px solid var(--primary);
-        flex-shrink: 0;
-      }
-
-      .instructions h3 {
-        color: var(--primary);
-        margin-bottom: 8px;
+      .prizes-row {
         display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+      }
+
+      .prize-item {
+        display: flex;
+        /* flex-direction: column; */
+        justify-content: space-around;
         align-items: center;
-        gap: 8px;
-        font-size: 1.1rem;
+        padding: 5px 5px;
+        border-radius: 8px;
+        background: var(--primary);
+        box-shadow: 0 2px 6px var(--shadow);
+        min-width: 80px;
       }
 
-      .instructions ol {
-        padding-left: 18px;
+      .prize-amount {
+        font-weight: 800;
+        color: white;
+        margin-left: 1px;
+        margin-right: 1px;
+        font-size: 1.2rem;
+        margin-bottom: 2px;
       }
 
-      .instructions li {
-        margin-bottom: 6px;
-        line-height: 1.4;
-        font-size: 0.9rem;
+      .prize-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+        text-align: center;
       }
 
       .game-container {
@@ -108,62 +101,49 @@
         flex-direction: column;
         align-items: center;
         gap: 15px;
-        max-width: 800px;
         margin: 0 auto;
-        padding: 0 15px;
-        flex: 1;
-        overflow: hidden;
-        width: 100%;
+        padding: 0 10px;
       }
 
       .board-container {
         width: 100%;
         margin-bottom: 15px;
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 0;
       }
 
       .board {
         display: grid;
-        gap: 10px;
         grid-template-columns: repeat(3, 1fr);
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
+        gap: 10px;
       }
 
       .cell {
         background: var(--card);
-        padding: 12px 10px 10px;
-        border-radius: 10px;
+        padding: 10px 8px;
+        border-radius: 8px;
         border: 2px solid #f0f3f8;
+        height: 100px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         transition: all 0.3s ease;
         position: relative;
-        box-shadow: 0 4px 12px var(--shadow);
-        aspect-ratio: 1/1;
-        min-height: 0;
+        box-shadow: 0 2px 5px var(--shadow);
       }
 
       .cell:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 16px var(--shadow);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px var(--shadow);
       }
 
       .cell input {
         border: 1px solid #e8e8e8;
-        border-radius: 6px;
-        padding: 8px 10px;
+        border-radius: 5px;
+        padding: 6px 8px;
         width: 90%;
         text-align: center;
-        font-size: 14px;
-        margin-bottom: 10px;
+        font-size: 12px;
+        margin-bottom: 8px;
         transition: border-color 0.2s;
       }
 
@@ -173,12 +153,20 @@
         box-shadow: 0 0 0 2px rgba(107, 70, 193, 0.1);
       }
 
+      .player-number {
+        font-weight: 800;
+        font-size: 20px;
+        color: var(--primary);
+        margin-bottom: 5px;
+        text-align: center;
+      }
+
       .player-name-container {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        margin-bottom: 8px;
+        gap: 5px;
+        margin-bottom: 6px;
         max-width: 100%;
       }
 
@@ -187,15 +175,14 @@
         text-align: center;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-size: 16px;
+        font-size: 13px;
         color: var(--primary);
-        margin-top: 8px;
       }
 
       .edit-icon {
         cursor: pointer;
         color: var(--primary);
-        font-size: 14px;
+        font-size: 12px;
         opacity: 0.7;
         transition: all 0.2s ease;
         display: flex;
@@ -208,12 +195,38 @@
         transform: scale(1.1);
       }
 
-      .player-number {
-        font-weight: 800;
-        font-size: 24px;
-        color: var(--primary);
-        margin-bottom: 4px;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      .token-row {
+        display: flex;
+        gap: 4px;
+        margin-top: 5px;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #f0f0f0;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .dot.active {
+        background: #2db84c;
+        transform: scale(1.1);
+      }
+
+      .badge {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: var(--primary);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 600;
+        padding: 2px 5px;
+        border-radius: 12px;
+        animation: fadeIn 0.5s;
       }
 
       .cell.ready {
@@ -234,52 +247,18 @@
         animation: pulse 1s;
       }
 
-      .token-row {
-        display: flex;
-        gap: 6px;
-        margin-top: 8px;
-      }
-
-      .dot {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: #f0f0f0;
-        border: 2px solid #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-      }
-
-      .dot.active {
-        background: #2db84c;
-        transform: scale(1.1);
-      }
-
-      .badge {
-        position: absolute;
-        top: 6px;
-        right: 6px;
-        background: var(--primary);
-        color: #fff;
-        font-size: 10px;
-        font-weight: 600;
-        padding: 3px 6px;
-        border-radius: 15px;
-        animation: fadeIn 0.5s;
-      }
-
       /* Estilos para el ranking y estado del juego */
       .game-status {
         width: 100%;
         max-width: 500px;
         margin: 0 auto 15px;
-        padding: 12px 15px;
-        border-radius: 8px;
+        padding: 10px 12px;
+        border-radius: 6px;
         text-align: center;
         font-weight: 500;
         background: white;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        flex-shrink: 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 13px;
       }
 
       .status-waiting {
@@ -305,24 +284,23 @@
       }
 
       #resetBtn {
-        margin: 15px auto;
-        padding: 10px 20px;
+        margin: 12px auto;
+        padding: 8px 16px;
         background: var(--primary);
         color: #fff;
         border: 0;
-        border-radius: 8px;
+        border-radius: 5px;
         cursor: pointer;
         font-weight: 600;
         transition: all 0.2s;
-        font-size: 14px;
+        font-size: 13px;
         display: block;
-        flex-shrink: 0;
       }
 
       #resetBtn:hover {
         background: var(--primary-light);
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(107, 70, 193, 0.3);
+        box-shadow: 0 3px 6px rgba(107, 70, 193, 0.3);
       }
 
       @keyframes pulse {
@@ -340,7 +318,7 @@
       @keyframes fadeIn {
         from {
           opacity: 0;
-          transform: translateY(-10px);
+          transform: translateY(-8px);
         }
         to {
           opacity: 1;
@@ -364,50 +342,49 @@
 
       .winner-modal-content {
         background: white;
-        padding: 25px;
-        border-radius: 15px;
+        padding: 20px;
+        border-radius: 10px;
         text-align: center;
-        max-width: 350px;
+        max-width: 320px;
         width: 90%;
         animation: modalFadeIn 0.5s;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
       }
 
       .winner-modal h2 {
         color: #6b46c1;
-        font-size: 20px;
-        margin-bottom: 15px;
+        font-size: 18px;
+        margin-bottom: 12px;
       }
 
       .winner-prize {
-        font-size: 26px;
+        font-size: 22px;
         font-weight: bold;
         color: #d4af37;
-        margin: 12px 0;
+        margin: 10px 0;
       }
 
       .winner-name {
-        font-size: 22px;
+        font-size: 20px;
         font-weight: bold;
-        margin: 12px 0;
+        margin: 10px 0;
         color: #333;
-        word-break: break-word;
       }
 
       .winner-position {
-        font-size: 38px;
+        font-size: 30px;
         font-weight: bold;
         color: #6b46c1;
-        margin: 12px 0;
+        margin: 10px 0;
       }
 
       .close-modal {
         background: #6b46c1;
         color: white;
         border: none;
-        padding: 8px 20px;
-        border-radius: 20px;
-        font-size: 14px;
+        padding: 7px 18px;
+        border-radius: 18px;
+        font-size: 13px;
         font-weight: 600;
         cursor: pointer;
         margin-top: 15px;
@@ -422,31 +399,30 @@
       @keyframes modalFadeIn {
         from {
           opacity: 0;
-          transform: translateY(-50px);
+          transform: translateY(-40px);
         }
         to {
           opacity: 1;
-          transform: translateY(0);
         }
       }
 
       /* Estilos para el botón de ranking */
       .ranking-button {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
+        bottom: 15px;
+        right: 15px;
         background: #6b46c1;
         color: white;
         border: none;
         border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         z-index: 100;
         transition: all 0.3s ease;
       }
@@ -472,14 +448,14 @@
 
       .ranking-modal-content {
         background: white;
-        padding: 25px;
-        border-radius: 15px;
-        max-width: 450px;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 400px;
         width: 90%;
-        max-height: 80vh;
+        max-height: 70vh;
         overflow-y: auto;
         animation: modalFadeIn 0.5s;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       }
 
       .ranking-modal h2 {
@@ -490,7 +466,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
       }
 
       .ranking-list {
@@ -500,10 +476,10 @@
       }
 
       .ranking-list li {
-        padding: 10px 12px;
-        font-size: 14px;
-        margin-bottom: 8px;
-        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 13px;
+        margin-bottom: 6px;
+        border-radius: 5px;
         background: rgba(107, 70, 193, 0.05);
         display: flex;
         justify-content: space-between;
@@ -529,26 +505,26 @@
         font-weight: bold;
         color: var(--primary);
         background: white;
-        width: 26px;
-        height: 26px;
+        width: 22px;
+        height: 22px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        font-size: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        font-size: 11px;
       }
 
       .close-ranking-modal {
         background: #6b46c1;
         color: white;
         border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
+        padding: 8px 18px;
+        border-radius: 5px;
         cursor: pointer;
         display: block;
-        margin: 15px auto 0;
-        font-size: 14px;
+        margin: 12px auto 0;
+        font-size: 13px;
         font-weight: 600;
         transition: all 0.3s ease;
       }
@@ -558,65 +534,28 @@
         transform: translateY(-2px);
       }
 
-      /* Asegurar que siempre sea 3x3 */
-      .board {
-        grid-template-columns: repeat(3, 1fr) !important;
-      }
-
-      /* Media queries para ajustes específicos */
-      @media (max-height: 700px) {
-        header {
-          padding: 5px 0;
-          margin-bottom: 10px;
-        }
-        
+      /* RESPONSIVE MEJORADO */
+      @media (max-width: 900px) {
         h1 {
           font-size: 1.6rem;
         }
         
-        .game-status {
+        .prize-item {
           padding: 8px 12px;
-          font-size: 0.9rem;
-          margin-bottom: 10px;
+          min-width: 70px;
         }
         
-        .board {
-          gap: 8px;
+        .prize-amount {
+          font-size: 1.3rem;
         }
         
-        .cell {
-          padding: 8px 6px 6px;
-        }
-        
-        .player-number {
-          font-size: 20px;
-        }
-        
-        .player-name {
-          font-size: 14px;
-        }
-        
-        .token-row {
-          margin-top: 5px;
-        }
-        
-        .dot {
-          width: 14px;
-          height: 14px;
-        }
-      }
-
-      @media (max-height: 600px) {
-        header {
-          display: none;
-        }
-        
-        .game-container {
-          gap: 10px;
+        .prize-label {
+          font-size: 0.8rem;
         }
         
         .cell {
-          padding: 6px 4px 4px;
+          height: 90px;
+          padding: 8px 6px;
         }
         
         .player-number {
@@ -625,18 +564,70 @@
         
         .player-name {
           font-size: 12px;
-          margin-top: 5px;
-        }
-        
-        .cell input {
-          padding: 6px 8px;
-          font-size: 12px;
-          margin-bottom: 6px;
         }
         
         .dot {
-          width: 12px;
-          height: 12px;
+          width: 11px;
+          height: 11px;
+        }
+        
+        .ranking-button {
+          bottom: 12px;
+          right: 12px;
+          width: 40px;
+          height: 40px;
+          font-size: 16px;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .prizes-row {
+          gap: 10px;
+        }
+        
+        .prize-item {
+          padding: 6px 10px;
+          min-width: 60px;
+        }
+        
+        .prize-amount {
+          font-size: 1.2rem;
+        }
+        
+        .prize-label {
+          font-size: 0.75rem;
+        }
+        
+        .cell {
+          height: 85px;
+          padding: 7px 5px;
+        }
+        
+        .player-number {
+          font-size: 16px;
+        }
+        
+        .player-name {
+          font-size: 11px;
+        }
+        
+        .cell input {
+          font-size: 11px;
+          padding: 5px 6px;
+        }
+        
+        .dot {
+          width: 10px;
+          height: 10px;
+        }
+        
+        .game-status {
+          font-size: 12px;
+          padding: 8px 10px;
+        }
+        
+        .board {
+          gap: 8px;
         }
       }
 
@@ -645,25 +636,251 @@
           padding: 10px;
         }
         
+        h1 {
+          font-size: 1.4rem;
+          margin-bottom: 10px;
+        }
+        
+        .prizes-row {
+          gap: 8px;
+        }
+        
+        .prize-item {
+          padding: 5px 8px;
+          min-width: 55px;
+        }
+        
+        .prize-amount {
+          font-size: 1.1rem;
+        }
+        
+        .prize-label {
+          font-size: 0.7rem;
+        }
+        
+        .cell {
+          height: 80px;
+          padding: 6px 4px;
+        }
+        
+        .player-number {
+          font-size: 15px;
+        }
+        
+        .player-name {
+          font-size: 10px;
+        }
+        
+        .cell input {
+          font-size: 10px;
+          padding: 4px 5px;
+          margin-bottom: 5px;
+        }
+        
+        .dot {
+          width: 9px;
+          height: 9px;
+        }
+        
+        .token-row {
+          gap: 3px;
+        }
+        
         .game-container {
-          padding: 0 10px;
+          gap: 12px;
+          padding: 0 5px;
+        }
+        
+        .header-container {
+          margin-bottom: 12px;
+          padding: 10px 0;
+        }
+        
+        .winner-modal-content {
+          padding: 15px;
+        }
+        
+        .winner-position {
+          font-size: 26px;
+        }
+        
+        .winner-name {
+          font-size: 18px;
+        }
+        
+        .winner-prize {
+          font-size: 20px;
+        }
+        
+        .ranking-modal-content {
+          padding: 15px;
         }
         
         .ranking-button {
-          bottom: 15px;
-          right: 15px;
-          width: 45px;
-          height: 45px;
-          font-size: 18px;
+          bottom: 10px;
+          right: 10px;
+          width: 35px;
+          height: 35px;
+          font-size: 14px;
+        }
+
+        .ranking-modal h2 {
+          font-size: 1.1rem;
+        }
+
+        .ranking-list li {
+          padding: 6px 8px;
+          font-size: 11px;
+        }
+
+        .ranking-position {
+          width: 18px;
+          height: 18px;
+          font-size: 9px;
+        }
+        
+        .board {
+          gap: 6px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .prizes-row {
+          gap: 6px;
+        }
+        
+        .prize-item {
+          padding: 4px 6px;
+          min-width: 50px;
+        }
+        
+        .prize-amount {
+          font-size: 1rem;
+        }
+        
+        .prize-label {
+          font-size: 0.65rem;
+        }
+        
+        .cell {
+          height: 75px;
+          padding: 5px 3px;
+        }
+        
+        .player-number {
+          font-size: 14px;
+        }
+        
+        .player-name {
+          font-size: 9px;
+        }
+        
+        .cell input {
+          font-size: 9px;
+          padding: 3px 4px;
+        }
+        
+        .dot {
+          width: 8px;
+          height: 8px;
+        }
+        
+        h1 {
+          font-size: 1.3rem;
+        }
+        
+        .game-status {
+          padding: 7px 9px;
+          font-size: 11px;
+        }
+        
+        .board {
+          gap: 5px;
+        }
+      }
+
+      @media (max-width: 350px) {
+        .prizes-row {
+          gap: 5px;
+        }
+        
+        .prize-item {
+          padding: 3px 5px;
+          min-width: 45px;
+        }
+        
+        .prize-amount {
+          font-size: 0.9rem;
+        }
+        
+        .prize-label {
+          font-size: 0.6rem;
+        }
+        
+        .cell {
+          height: 70px;
+          padding: 4px 2px;
+        }
+        
+        .player-number {
+          font-size: 13px;
+        }
+        
+        .player-name {
+          font-size: 8px;
+        }
+        
+        .cell input {
+          font-size: 8px;
+          padding: 2px 3px;
+        }
+        
+        .dot {
+          width: 7px;
+          height: 7px;
+        }
+        
+        h1 {
+          font-size: 1.2rem;
+        }
+
+        .ranking-list li {
+          flex-direction: column;
+          gap: 4px;
+          text-align: center;
+        }
+
+        .ranking-position {
+          margin: 0 auto;
+        }
+        
+        .board {
+          gap: 4px;
         }
       }
     </style>
   </head>
   <body>
     <div class="app">
-      <header>
+      <div class="header-container">
         <h1>Dinamica Manyalo</h1>
-      </header>
+        
+        <div class="prizes-row">
+          <div class="prize-item" >
+            <span class="prize-amount">20</span>
+            <span class="prize-label">Panes</span>
+          </div>
+          <div class="prize-item">
+            <span class="prize-amount">10</span>
+            <span class="prize-label">Panes</span>
+          </div>
+          <div class="prize-item">
+            <span class="prize-amount">5</span>
+            <span class="prize-label">Panes</span>
+          </div>
+        </div>
+        <div  class="game-status status-waiting">5 panes</div>
+      </div>
 
       <div class="game-container">
         <div id="gameStatus" class="game-status status-waiting">
@@ -681,7 +898,7 @@
       const resetBtn = document.getElementById("resetBtn");
       const gameStatus = document.getElementById("gameStatus");
 
-      const premios = ["20 Lukas", "10 Lukas", "5 Lukas"];
+      const premios = ["20 Panes", "10 Panes", "5 Panes"];
       const ranking = [];
       const playersCount = 9;
 
@@ -870,7 +1087,7 @@
                 <h2>¡Tenemos un ganador!</h2>
                 <div class="winner-position" id="winnerPosition">1° Lugar</div>
                 <div class="winner-name" id="winnerName">Nombre del Jugador</div>
-                <div class="winner-prize" id="winnerPrize">20 Lukas</div>
+                <div class="winner-prize" id="winnerPrize">20 Panes</div>
                 <button class="close-modal" id="closeWinnerModal">Cerrar</button>
             </div>
         `;
